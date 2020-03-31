@@ -1,0 +1,23 @@
+import numpy as np
+import matplotlib as plt
+import pandas as pd
+from sklearn import preprocessing
+from keras.layers import Input, Dense
+from keras.models import Model
+X= np.array([[1,0,0,0],
+     [0,1,0,0],
+     [0,0,1,0],
+     [0,0,0,1]])
+input_size = 4
+hidden_size = 128
+output_size = 4
+
+x = Input(shape=(input_size,))
+h = Dense(hidden_size, activation='elu')(x)
+r = Dense(output_size, activation='sigmoid')(h)
+
+autoencoder = Model(input=x, output=r)
+autoencoder.compile(optimizer='nadam', loss='mse',metrics=['accuracy'])
+history= autoencoder.fit(X, X, batch_size=64, nb_epoch=750)
+pred = autoencoder.predict(X)
+print(pred)
